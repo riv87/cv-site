@@ -1,1 +1,122 @@
+name: Deploy Rivka CV
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rivka-cv-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Package public site files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          import subprocess
+          import zipfile
+
+          root = Path.cwd()
+          bundle = Path(os.environ["RUNNER_TEMP"]) / "rivka-site.zip"
+          tracked = subprocess.check_output(["git", "ls-files", "-z"]).decode().split("\0")
+          files = []
+          for name in filter(None, tracked):
+              path = Path(name)
+              if any(part.startswith(".") for part in path.parts):
+                  continue
+              if path.name.lower() in {"readme.md", "license", "license.md", "agents.md", "claude.md"}:
+                  continue
+              if path.is_symlink() or any(p.is_symlink() for p in path.parents):
+                  raise SystemExit("Symbolic links cannot be published: " + name)
+              if not path.is_file():
+                  raise SystemExit("Not a regular file: " + name)
+              files.append(path)
+          if Path("index.html") not in files:
+              raise SystemExit("index.html must exist at the repository root")
+          if len(files) > 3000 or sum(p.stat().st_size for p in files) > 100 * 1024 * 1024:
+              raise SystemExit("Site exceeds deployment size limits")
+          with zipfile.ZipFile(bundle, "w", zipfile.ZIP_DEFLATED) as archive:
+              for path in files:
+                  archive.write(path, path.as_posix())
+          if bundle.stat().st_size > 25 * 1024 * 1024:
+              raise SystemExit("Compressed site exceeds 25 MiB")
+          print(f"Packaged {len(files)} public files; {bundle.stat().st_size} bytes")
+          PY
+
+      - name: Upload through restricted SSH key
+        shell: bash
+        env:
+          DEPLOY_KEY: ${{ secrets.RIVKA_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$DEPLOY_KEY" || { echo "Missing RIVKA_SSH_PRIVATE_KEY"; exit 1; }
+          umask 077
+          key="$RUNNER_TEMP/rivka-deploy-key"
+          hosts="$RUNNER_TEMP/rivka-known-hosts"
+          trap 'rm -f "$key" "$hosts"' EXIT
+          printf '%s\n' "$DEPLOY_KEY" | tr -d '\r' > "$key"
+          unset DEPLOY_KEY
+          printf '%s\n' '34.18.23.97 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJu6UcuCOCCeh2KWp5rGFT7/NUasx9shYYBMyspRdKee' > "$hosts"
+          ssh -T -i "$key" \
+            -o IdentitiesOnly=yes \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$hosts" \
+            -o ConnectTimeout=20 \
+            -o ServerAliveInterval=15 \
+            -o ServerAliveCountMax=3 \
+            rivka-deploy@34.18.23.97 < "$RUNNER_TEMP/rivka-site.zip"
+
+      - name: Verify published files over HTTPS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          import time
+          import urllib.parse
+          import urllib.request
+          import zipfile
+
+          base = "https://rivkaberman.harmonyrobogov.com/"
+          revision = os.environ["GITHUB_SHA"]
+          with zipfile.ZipFile(Path(os.environ["RUNNER_TEMP"]) / "rivka-site.zip") as archive:
+              for item in archive.infolist():
+                  expected = hashlib.sha256(archive.read(item)).digest()
+                  url = base + urllib.parse.quote(item.filename, safe="/") + "?deploy=" + revision
+                  for attempt in range(3):
+                      try:
+                          request = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+                          with urllib.request.urlopen(request, timeout=30) as response:
+                              if response.status != 200:
+                                  raise RuntimeError("Unexpected HTTP status")
+                              actual = response.read(item.file_size + 1)
+                          if hashlib.sha256(actual).digest() != expected:
+                              raise RuntimeError("Published content differs from repository")
+                          break
+                      except Exception:
+                          if attempt == 2:
+                              raise
+                          time.sleep(3)
+                  print("Verified:", item.filename)
+          print("HTTPS deployment verified.")
+          PY
+
 
