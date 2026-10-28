@@ -195,6 +195,18 @@ section.blk{padding-block:clamp(72px,10vw,128px)}
 .mkt-col li{padding-left:22px;position:relative}
 .mkt-col li::before{content:"";position:absolute;left:0;top:.75em;width:10px;border-top:1.5px dashed var(--accent)}
 @media (max-width:820px){.mkt-cols{grid-template-columns:1fr}}
+.m-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px 0;background:none;border:0;
+  border-block:1px solid var(--line);color:var(--fg);font-family:inherit;text-align:left;cursor:pointer}
+.m-toggle>span:first-child{display:grid;gap:4px}
+.m-t1{font-family:var(--f-display);font-size:clamp(24px,2.8vw,32px);line-height:1.1;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.m-t2{color:var(--muted);font-size:14px}
+.m-toggle:hover .m-t1{transform:translateX(6px)}
+.m-toggle[aria-expanded="true"] .plus{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.m-toggle[aria-expanded="true"] .plus::after{transform:translate(-50%,-50%) rotate(0)}
+.m-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.2,.7,.2,1)}
+.m-body.open{grid-template-rows:1fr}
+.m-body>div{overflow:hidden}
+.m-body .mills{padding-top:36px}
 .mills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,4vw,48px)}
 .mcol{border-top:1px solid var(--fg);padding-top:20px;min-width:0}
 .mcol h3{font-size:clamp(26px,3vw,34px)}
@@ -420,6 +432,11 @@ footer .li svg{width:15px;height:15px}
       <div><span class="mono">Manufacturing network</span><h2>Mills &amp; makers I've <em>worked with</em>.</h2></div>
       <p>Hands-on work with textile mills, garment makers and production partners across three countries. That covers fabric selection, product development, production, quality, delivery and negotiation.</p>
     </div>
+    <button class="m-toggle" id="millsToggle" type="button" aria-expanded="false" aria-controls="millsBody">
+      <span><span class="m-t1">See the full list</span><span class="m-t2">13 named partners · United Kingdom, Italy, Portugal</span></span>
+      <span class="plus" aria-hidden="true"></span>
+    </button>
+    <div class="m-body" id="millsBody"><div>
     <div class="mills">
       <div class="mcol"><h3>United Kingdom</h3><ul>
         <li>Marling &amp; Evans</li><li class="m-more">Other British mills and specialist makers</li></ul></div>
@@ -429,6 +446,7 @@ footer .li svg{width:15px;height:15px}
         <li>Armindohub</li><li>Estrela</li><li>Ohms</li><li>Replica Ltd</li><li class="m-more">Further European production partners</li></ul></div>
     </div>
     <p class="net-note">All of these partners produce for leading luxury brands to demanding specifications.</p>
+    </div></div>
   </div>
 </section>
 
@@ -695,6 +713,9 @@ function setFilter(k){
   b.addEventListener('click',()=>{const addr='rivkistoll@gmail.com';const done=()=>{st.textContent='Copied';setTimeout(()=>st.textContent='Copy',1800)};
     const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('mailText'));const s=getSelection();s.removeAllRanges();s.addRange(r)};
     try{navigator.clipboard.writeText(addr).then(done,sel)}catch(e){sel()}});})();
+(function(){const t=document.getElementById('millsToggle'),bd=document.getElementById('millsBody');if(!t)return;
+  t.addEventListener('click',()=>{const o=t.getAttribute('aria-expanded')!=='true';t.setAttribute('aria-expanded',o);bd.classList.toggle('open',o);
+    t.querySelector('.m-t1').textContent=o?'Hide the list':'See the full list'});})();
 const names=['Burberry','Mulberry','Hermès','Private White VC','Chanel Joan Elkayam','Tenue','Red Wing Amsterdam'];
 const half=names.map(n=>'<span>'+n.replace('&','&amp;')+'</span>').join('');
 document.getElementById('marq').innerHTML=half+half;
