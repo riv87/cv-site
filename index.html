@@ -251,7 +251,20 @@ section.blk{padding-block:clamp(72px,10vw,128px)}
 .contact h2{font-size:clamp(46px,8vw,112px);letter-spacing:-.02em;line-height:.95}
 .contact p{color:var(--muted);max-width:56ch;margin-top:22px}
 footer{border-top:1px solid var(--line);padding-block:26px;color:var(--muted)}
-footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+footer .foot-r{display:flex;align-items:center;gap:18px}
+footer a{text-decoration:none;transition:color .2s;text-transform:none;letter-spacing:.02em}
+footer a:hover{color:var(--fg)}
+footer .li{width:38px;height:38px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;transition:all .25s}
+footer .li:hover{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+footer .li svg{width:15px;height:15px}
+.contact-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:34px}
+.contact-row .btn svg{width:15px;height:15px}
+.mail-copy{display:inline-flex;align-items:center;gap:12px;padding:12px 14px 12px 20px;border-radius:999px;border:1px solid var(--line-2);
+  background:var(--surface);color:var(--fg);font-family:inherit;font-size:15px;cursor:pointer;transition:border-color .2s;max-width:100%}
+.mail-copy:hover{border-color:var(--fg)}
+.mail-copy span{user-select:all;overflow-wrap:anywhere}
+.mail-copy small{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);padding:4px 10px;border-radius:999px;background:var(--accent-soft)}
 </style>
 </head>
 <body>
@@ -492,11 +505,16 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
   <div class="wrap">
     <span class="mono" style="color:var(--accent)">Next step</span>
     <h2 style="margin-top:18px">Let's talk about<br><em>what you're building.</em></h2>
-    <p>Open to CEO, managing director and board roles with luxury fashion, apparel and accessories houses, in Israel and internationally. Contact details available on request.</p>
+    <p>Open to CEO, managing director and board roles with luxury fashion, apparel and accessories houses, in Israel and internationally. </p>
+    <div class="contact-row">
+      <a class="btn solid" href="mailto:rivkistoll@gmail.com?subject=Hello%20Rivka">Email me <span aria-hidden="true">→</span></a>
+      <button class="mail-copy" type="button" id="copyMail" aria-label="Copy email address"><span id="mailText">rivkistoll@gmail.com</span><small id="copyState">Copy</small></button>
+      <a class="btn ghost" href="https://www.linkedin.com/in/rivki-berman-971a17101/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3v-11zm6.5 0h3.8v1.5h.06c.53-1 1.83-1.85 3.76-1.85 4.02 0 4.76 2.5 4.76 5.75v5.6h-4v-4.96c0-1.18-.02-2.7-1.7-2.7-1.7 0-1.96 1.28-1.96 2.6v5.06h-4v-11z"/></svg> LinkedIn</a>
+    </div>
   </div>
 </section>
 
-<footer><div class="wrap mono"><span>© 2026 Rivka Berman</span><span>Executive CV</span></div></footer>
+<footer><div class="wrap mono"><span>© 2026 Rivka Berman</span><span class="foot-r"><a href="mailto:rivkistoll@gmail.com">rivkistoll@gmail.com</a><a class="li" href="https://www.linkedin.com/in/rivki-berman-971a17101/" target="_blank" rel="noopener" aria-label="Rivka Berman on LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3v-11zm6.5 0h3.8v1.5h.06c.53-1 1.83-1.85 3.76-1.85 4.02 0 4.76 2.5 4.76 5.75v5.6h-4v-4.96c0-1.18-.02-2.7-1.7-2.7-1.7 0-1.96 1.28-1.96 2.6v5.06h-4v-11z"/></svg></a></span></div></footer>
 
 <script>
 (function(){
@@ -630,6 +648,10 @@ function setFilter(k){
   items.forEach((el,j)=>el.addEventListener('pointerenter',()=>{clearTimeout(tm);go(j)}));
   items.forEach(el=>el.addEventListener('pointerleave',()=>{clearTimeout(tm);tm=setTimeout(next,2600)}));
   go(0);tm=setTimeout(next,2600);})();
+(function(){const b=document.getElementById('copyMail');if(!b)return;const st=document.getElementById('copyState');
+  b.addEventListener('click',()=>{const addr='rivkistoll@gmail.com';const done=()=>{st.textContent='Copied';setTimeout(()=>st.textContent='Copy',1800)};
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('mailText'));const s=getSelection();s.removeAllRanges();s.addRange(r)};
+    try{navigator.clipboard.writeText(addr).then(done,sel)}catch(e){sel()}});})();
 const names=['Burberry','Mulberry','Hermès','Private White VC','Chanel Joan Elkayam','Tenue','Red Wing Amsterdam'];
 const half=names.map(n=>'<span>'+n.replace('&','&amp;')+'</span>').join('');
 document.getElementById('marq').innerHTML=half+half;
