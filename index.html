@@ -247,6 +247,16 @@ section.blk{padding-block:clamp(72px,10vw,128px)}
 .panel p.small{color:var(--muted);font-size:15px;margin-top:18px}
 @media (max-width:820px){.foot{grid-template-columns:1fr}}
 
+.venture{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.v-name{padding:clamp(26px,4vw,44px);background:var(--fg);color:var(--bg);display:flex;flex-direction:column;gap:10px;min-width:0}
+.v-logo{font-family:var(--f-display);font-size:clamp(44px,6vw,72px);line-height:1;font-style:italic}
+.v-he{font-size:20px;opacity:.7;align-self:flex-start}
+.v-role{margin-top:auto;padding-top:28px;font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--thread)}
+.v-body{padding:clamp(26px,4vw,44px);display:grid;gap:16px;align-content:start;min-width:0}
+.v-body p{color:var(--muted);max-width:56ch}
+.v-body .v-lead{font-family:var(--f-display);font-size:clamp(24px,2.6vw,32px);line-height:1.2;color:var(--fg)}
+.v-body .btn{justify-self:start;margin-top:8px}
+@media (max-width:820px){.venture{grid-template-columns:1fr}}
 .contact{text-align:left;border-top:1px solid var(--line)}
 .contact h2{font-size:clamp(46px,8vw,112px);letter-spacing:-.02em;line-height:.95}
 .contact p{color:var(--muted);max-width:56ch;margin-top:22px}
@@ -288,6 +298,7 @@ footer .li svg{width:15px;height:15px}
       <a href="#results">Results</a>
       <a href="#network">Network</a>
       <a href="#board">Board value</a>
+      <a href="#ventures">Ventures</a>
     </div>
   </div>
 </nav>
@@ -505,6 +516,27 @@ footer .li svg{width:15px;height:15px}
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="blk" id="ventures" style="padding-top:0">
+  <div class="wrap">
+    <div class="sechead">
+      <div><span class="mono">Ventures</span><h2>Beyond fashion: <em>tech</em>.</h2></div>
+      <p>Alongside my luxury work, I'm a partner in a technology company.</p>
+    </div>
+    <article class="venture">
+      <div class="v-name">
+        <span class="v-logo">Harmony</span>
+        <span class="v-he" lang="he" dir="rtl">הרמוני</span>
+        <span class="v-role">Partner</span>
+      </div>
+      <div class="v-body">
+        <p class="v-lead">Most employees don't know they're owed money. Harmony finds it.</p>
+        <p>An Israeli tech company that checks employees' payslips for money they are owed. People upload a payslip and get the results within 48 hours, and it's completely free if nothing is found.</p>
+        <a class="btn ghost" href="https://harmonyrobogov.com/" target="_blank" rel="noopener">Visit harmonyrobogov.com <span aria-hidden="true">↗</span></a>
+      </div>
+    </article>
   </div>
 </section>
 
