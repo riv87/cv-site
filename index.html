@@ -241,7 +241,7 @@ section.blk{padding-block:clamp(72px,10vw,128px)}
 .places{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .places span{padding:9px 16px;border-radius:999px;border:1px solid var(--line-2);font-size:15px}
 .places span.home{background:var(--accent);border-color:var(--accent);color:var(--bg)}
-.langs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+.langs{display:grid;grid-template-columns:1fr;gap:0;margin-top:10px}
 .lang{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line);font-family:var(--f-display);font-size:24px}
 .lang span{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
 .panel p.small{color:var(--muted);font-size:15px;margin-top:18px}
@@ -290,7 +290,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
   <div class="fact" role="listitem"><div class="n">Luxury</div><div class="t">Exclusively luxury houses and premium brands</div></div>
   <div class="fact" role="listitem"><div class="n">Millions</div><div class="t">PPE masks produced in 10 months from a new clean room</div></div>
   <div class="fact" role="listitem"><div class="n">3</div><div class="t">Manufacturing countries: UK, Italy, Portugal</div></div>
-  <div class="fact" role="listitem"><div class="n">4</div><div class="t">Languages: English, Hebrew, German, Dutch</div></div>
+  <div class="fact" role="listitem"><div class="n">3</div><div class="t">Languages: English, Hebrew, German</div></div>
 </div>
 
 <section class="blk" id="chain">
@@ -410,7 +410,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
       <div class="cl"><span class="mono">Luxury houses served</span>
         <ul><li>Burberry</li><li>Mulberry</li><li>Hermès</li></ul></div>
       <div class="cl"><span class="mono">Luxury &amp; premium brand experience</span>
-        <ul><li>Private White VC</li><li>Chanel Joan Elkayam</li><li>Tenue</li><li>Red Wing Amsterdam</li><li>The Finchley Group</li></ul></div>
+        <ul><li>Private White VC</li><li>Chanel Joan Elkayam</li><li>Tenue</li><li>Red Wing Amsterdam</li></ul></div>
     </div>
   </div>
 </section>
@@ -466,7 +466,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
       <div class="pillar"><span class="mono">End to end</span><h3>The whole chain</h3><p>Product concept, sourcing, production, quality, inventory, fulfilment, wholesale and direct-to-consumer, all from one leader.</p></div>
       <div class="pillar"><span class="mono">Cash</span><h3>Working-capital discipline</h3><p>Align production commitments, stock and demand to make inventory work harder and free cash to reinvest.</p></div>
       <div class="pillar"><span class="mono">Growth</span><h3>International growth</h3><p>Build sales, eCommerce, CRM, marketing and technology that scale across brands and markets.</p></div>
-      <div class="pillar"><span class="mono">People</span><h3>Cross-border partnerships</h3><p>European factories, specialist suppliers, brand partners, distributors and mixed teams, in four languages.</p></div>
+      <div class="pillar"><span class="mono">People</span><h3>Cross-border partnerships</h3><p>European factories, specialist suppliers, brand partners, distributors and mixed teams, in three languages.</p></div>
     </div>
   </div>
 </section>
@@ -481,7 +481,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
       <div class="panel"><span class="mono">Languages</span>
         <div class="langs">
           <div class="lang">English<span>EN</span></div><div class="lang">Hebrew<span>HE</span></div>
-          <div class="lang">German<span>DE</span></div><div class="lang">Dutch<span>NL</span></div>
+          <div class="lang">German<span>DE</span></div>
         </div>
       </div>
     </div>
@@ -553,7 +553,7 @@ const ROLES=[
   intro:'Advisory and hands-on support for premium denim and apparel brands across three regions.',
   pts:['Advised on wholesale, international distribution, D2C operations and performance marketing.',
        'Supported inventory and sales planning, eCommerce, CRM, marketing automation and commercial systems.',
-       'Brand and group experience includes The Finchley Group, plus denim distribution.',
+       'Supported denim distribution across the UK, Europe and North America.',
        'Combined sales strategy, operating data, digital channels and retention to support better commercial decisions.'],
   focus:['Distribution','Performance marketing','Retention'],tools:[]}
 ];
@@ -626,7 +626,7 @@ function setFilter(k){
   items.forEach((el,j)=>el.addEventListener('pointerenter',()=>{clearTimeout(tm);go(j)}));
   items.forEach(el=>el.addEventListener('pointerleave',()=>{clearTimeout(tm);tm=setTimeout(next,2600)}));
   go(0);tm=setTimeout(next,2600);})();
-const names=['Burberry','Mulberry','Hermès','Private White VC','Chanel Joan Elkayam','Tenue','Red Wing Amsterdam','The Finchley Group'];
+const names=['Burberry','Mulberry','Hermès','Private White VC','Chanel Joan Elkayam','Tenue','Red Wing Amsterdam'];
 const half=names.map(n=>'<span>'+n.replace('&','&amp;')+'</span>').join('');
 document.getElementById('marq').innerHTML=half+half;
 
